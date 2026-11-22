@@ -1,0 +1,152 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    min-height: 100vh;
+    color: white;
+    padding: 30px 15px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+h1 {
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    color: #cbd5e1;
+    margin-bottom: 40px;
+    font-size: 17px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+
+.device-card {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 30px 20px;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.device-icon {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.device-card h2 {
+    margin-bottom: 15px;
+}
+
+.device-card p {
+    margin-bottom: 20px;
+    color: #a7f3d0;
+    font-weight: bold;
+}
+
+button {
+    border: none;
+    background: #2563eb;
+    color: white;
+    padding: 11px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    font-size: 14px;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+button.off {
+    background: #dc2626;
+}
+
+button.off:hover {
+    background: #b91c1c;
+}
+
+.refresh {
+    margin-top: 30px;
+    background: #7c3aed;
+}
+
+#message {
+    margin-top: 20px;
+    color: #86efac;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 25px;
+    }
+}
+
+
+/* Schedule and Activity Tables */
+
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+    color: #222;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th {
+    background: #4935a8;
+    color: white;
+    padding: 14px;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background: #eee;
+}
+
+/* Schedule Form */
+
+form {
+    margin: 25px auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    background: #ffffff;
+    color: #222;
+    border-radius: 12px;
+}
+
+form label,
+form select,
+form input {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+

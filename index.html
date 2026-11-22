@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Home Automation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Smart Home Automation System</h1>
+
+    <h2>Control Your Devices</h2>
+    <div id="devices"></div>
+
+    <h2>Schedule Device</h2>
+
+    <form id="scheduleForm">
+        <label>Choose Device:</label>
+        <select id="deviceName">
+            <option>Smart Light</option>
+            <option>Smart Fan</option>
+            <option>Smart Air Conditioner</option>
+        </select>
+
+        <label>Choose Action:</label>
+        <select id="action">
+            <option>ON</option>
+            <option>OFF</option>
+        </select>
+
+        <label>Schedule Date and Time:</label>
+        <input type="datetime-local" id="scheduledTime" required>
+
+        <button type="submit">Add Schedule</button>
+    </form>
+
+    <p id="scheduleMessage"></p>
+
+    
+<h2>Scheduled Tasks</h2>
+
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>Device</th>
+            <th>Action</th>
+            <th>Scheduled Time</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="scheduleList"></tbody>
+</table>
+\n
+<h2>Device Activity Logs</h2>
+
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>Device</th>
+            <th>Action</th>
+            <th>Timestamp</th>
+        </tr>
+    </thead>
+    <tbody id="logsList"></tbody>
+</table>
+\n<script>
+        async function loadDevices() {
+            const response = await fetch('/devices');
+            const devices = await response.json();
+
+            document.getElementById('devices').innerHTML = devices.map(device => `
+                <div class="device-card">
+                    <h3>${device.name}</h3>
+                    <p>Type: ${device.type}</p>
+                    <p>Status: <strong>${device.status}</strong></p>
+                    <button onclick="controlDevice('${device.name}', 'ON')">ON</button>
+                    <button onclick="controlDevice('${device.name}', 'OFF')">OFF</button>
+                </div>
+            `).join('');
+        }
+
+        async function controlDevice(name, action) {
+            const response = await fetch('/control', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    device_name: name,
+                    action: action
+                })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            loadDevices();
+        }
+
+        document.getElementById('scheduleForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const response = await fetch('/schedule', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    device_name: document.getElementById('deviceName').value,
+                    action: document.getElementById('action').value,
+                    scheduled_time: document.getElementById('scheduledTime').value.replace('T', ' ')
+                })
+            });
+
+            const result = await response.json();
+            document.getElementById('scheduleMessage').innerText = result.message;
+            this.reset();
+        });
+
+        loadDevices();
+    
+async function loadSchedules() {
+    const response = await fetch('/schedules');
+    const schedules = await response.json();
+
+    document.getElementById('scheduleList').innerHTML =
+        schedules.map(task => `
+            <tr>
+                <td>${task.device}</td>
+                <td>${task.action}</td>
+                <td>${task.scheduled_time}</td>
+                <td>${task.executed == 1 ? "Completed" : "Pending"}</td>
+            </tr>
+        `).join('');
+}
+
+loadSchedules();
+setInterval(loadSchedules, 10000);
+\n
+async function loadLogs() {
+    const response = await fetch('/logs');
+    const logs = await response.json();
+
+    document.getElementById('logsList').innerHTML =
+        logs.map(log => `
+            <tr>
+                <td>${log.device}</td>
+                <td>${log.action}</td>
+                <td>${log.timestamp}</td>
+            </tr>
+        `).join('');
+}
+
+loadLogs();
+setInterval(loadLogs, 10000);
+\n</script>
+
+</body>
+</html>
